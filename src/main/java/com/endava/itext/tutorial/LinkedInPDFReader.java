@@ -21,7 +21,7 @@ public class LinkedInPDFReader {
         StringBuilder sb = new StringBuilder();
         for (int i = 1; i <= pdfReader.getNumberOfPages(); i++) {
             strategy = (ITextExtractionStrategy) new FilteredTextRenderListener(new LocationTextExtractionStrategy(), filter);
-            sb.AppendLine(PdfTextExtractor.GetTextFromPage(pdfReader, i, strategy));
+            sb.appendLine(PdfTextExtractor.getTextFromPage(pdfReader, i, strategy));
         }
         return null;
     }
