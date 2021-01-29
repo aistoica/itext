@@ -3,13 +3,9 @@ package com.endava.itext.tutorial;
 import org.apache.pdfbox.cos.COSName;
 import org.apache.pdfbox.pdmodel.PDDocument;
 import org.apache.pdfbox.pdmodel.PDPage;
-import org.apache.pdfbox.pdmodel.PDResources;
 
 import java.io.File;
 import java.io.IOException;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Map;
 
 public class MainApp {
 
