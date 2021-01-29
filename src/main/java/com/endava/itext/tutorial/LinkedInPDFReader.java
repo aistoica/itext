@@ -7,19 +7,10 @@ import java.io.IOException;
 
 public class LinkedInPDFReader {
 
-    private static LinkedInPDFReader instance;
+    PdfReader pdfReader;
 
-    private LinkedInPDFReader(){}
-
-    public static LinkedInPDFReader getInstance(){
-        if (instance == null) {
-            synchronized (LinkedInPDFReader.class){
-                if (instance == null){
-                    instance = new LinkedInPDFReader();
-                }
-            }
-        }
-        return instance;
+    public LinkedInPDFReader(String filePath) throws IOException {
+        this.pdfReader = new PdfReader(filePath);
     }
 
     public String getCurrentEmployer(){
@@ -43,10 +34,7 @@ public class LinkedInPDFReader {
     }
 
 
-    public void readPdf(String filePath) throws IOException {
-
-            //Create PdfReader instance.
-            PdfReader pdfReader = new PdfReader(filePath);
+    public void readPdf() throws IOException {
 
             //Get the number of pages in pdf.
             int pages = pdfReader.getNumberOfPages();
