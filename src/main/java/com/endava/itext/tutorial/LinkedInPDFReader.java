@@ -1,7 +1,8 @@
 package com.endava.itext.tutorial;
 
+import com.itextpdf.text.Rectangle;
 import com.itextpdf.text.pdf.PdfReader;
-import com.itextpdf.text.pdf.parser.PdfTextExtractor;
+import com.itextpdf.text.pdf.parser.*;
 
 import java.io.IOException;
 
@@ -13,23 +14,51 @@ public class LinkedInPDFReader {
         this.pdfReader = new PdfReader(filePath);
     }
 
-    public String setCurrentEmployer(){
-        //TODO: implement get current employer
+    public <ITextExtractionStrategy> String getCurrentEmployer(){
+        Rectangle rect = null;
+        RenderFilter[] filter = {new RegionTextRenderFilter(rect)};
+        ITextExtractionStrategy strategy;
+        StringBuilder sb = new StringBuilder();
+        for (int i = 1; i <= pdfReader.getNumberOfPages(); i++) {
+            strategy = (ITextExtractionStrategy) new FilteredTextRenderListener(new LocationTextExtractionStrategy(), filter);
+            sb.AppendLine(PdfTextExtractor.GetTextFromPage(pdfReader, i, strategy));
+        }
         return null;
     }
 
-    public String setCoreSkills(){
-        //TODO: implement get core skills
+    public <ITextExtractionStrategy> String getCoreSkills(){
+        Rectangle rect = null;
+        RenderFilter[] filter = {new RegionTextRenderFilter(rect)};
+        ITextExtractionStrategy strategy;
+        StringBuilder sb = new StringBuilder();
+        for (int i = 1; i <= pdfReader.getNumberOfPages(); i++) {
+            strategy = (ITextExtractionStrategy) new FilteredTextRenderListener(new LocationTextExtractionStrategy(), filter);
+            sb.AppendLine(PdfTextExtractor.GetTextFromPage(pdfReader, i, strategy));
+        }
         return null;
     }
 
-    public String setCurrentJobTitle(){
-        //TODO: implement get current job title
+    public <ITextExtractionStrategy> String getCurrentJobTitle(){
+        Rectangle rect = null;
+        RenderFilter[] filter = {new RegionTextRenderFilter(rect)};
+        ITextExtractionStrategy strategy;
+        StringBuilder sb = new StringBuilder();
+        for (int i = 1; i <= pdfReader.getNumberOfPages(); i++) {
+            strategy = (ITextExtractionStrategy) new FilteredTextRenderListener(new LocationTextExtractionStrategy(), filter);
+            sb.AppendLine(PdfTextExtractor.GetTextFromPage(pdfReader, i, strategy));
+        }
         return null;
     }
 
-    public Integer setTotalYearsOfExperience(){
-        //TODO: implement get total years
+    public <ITextExtractionStrategy> String getTotalYearsOfExperience(){
+        Rectangle rect = null;
+        RenderFilter[] filter = {new RegionTextRenderFilter(rect)};
+        ITextExtractionStrategy strategy;
+        StringBuilder sb = new StringBuilder();
+        for (int i = 1; i <= pdfReader.getNumberOfPages(); i++) {
+            strategy = (ITextExtractionStrategy) new FilteredTextRenderListener(new LocationTextExtractionStrategy(), filter);
+            sb.AppendLine(PdfTextExtractor.GetTextFromPage(pdfReader, i, strategy));
+        }
         return null;
     }
 
@@ -53,4 +82,6 @@ public class LinkedInPDFReader {
             //Close the PdfReader.
             pdfReader.close();
     }
+
+
 }
