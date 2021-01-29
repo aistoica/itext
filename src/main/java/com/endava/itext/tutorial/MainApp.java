@@ -12,7 +12,7 @@ public class MainApp {
 
         try {
             LinkedInPDFReader pdfReader = new LinkedInPDFReader("/pdfs/BogdanBengaProfile.pdf");
-            pdfReader.readPdf();
+//            pdfReader.readPdf();
 
             //set current Employer
             currentEmployer = pdfReader.getCurrentEmployer();
