@@ -18,5 +18,18 @@ public class MainApp {
             e.printStackTrace();
         }
 
+        try {
+            pdfReader.readPdf("/pdfs/OteleaFelixProfile.pdf");
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        try {
+            pdfReader.readPdf("/pdfs/AndreiStoicaProfile.pdf");
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+
+
     }
 }

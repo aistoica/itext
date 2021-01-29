@@ -13,22 +13,22 @@ public class LinkedInPDFReader {
         this.pdfReader = new PdfReader(filePath);
     }
 
-    public String getCurrentEmployer(){
+    public String setCurrentEmployer(){
         //TODO: implement get current employer
         return null;
     }
 
-    public String getCoreSkills(){
+    public String setCoreSkills(){
         //TODO: implement get core skills
         return null;
     }
 
-    public String getCurrentJobTitle(){
+    public String setCurrentJobTitle(){
         //TODO: implement get current job title
         return null;
     }
 
-    public Integer getTotalYearsOfExperience(){
+    public Integer setTotalYearsOfExperience(){
         //TODO: implement get total years
         return null;
     }
