@@ -1,13 +1,11 @@
 package com.endava.itext.tutorial;
-
-import com.itextpdf.text.Rectangle;
-import com.itextpdf.text.pdf.PdfReader;
-import com.itextpdf.text.pdf.parser.*;
-import jdk.jfr.EventType;
+import com.itextpdf.kernel.geom.Rectangle;
+import com.itextpdf.kernel.pdf.canvas.parser.listener.LocationTextExtractionStrategy;
+import com.itextpdf.text.pdf.parser.RenderFilter;
 import org.apache.pdfbox.cos.COSName;
 import org.apache.pdfbox.pdmodel.PDDocument;
 import org.apache.pdfbox.pdmodel.PDPage;
-import com.itextpdf.text.pdf.parser.RegionTextRenderFilter;
+
 
 import java.io.File;
 import java.io.IOException;
@@ -24,6 +22,8 @@ public class MainApp {
                 System.out.println(page.getResources().getXObject(cosName).toString());
 
             }
+
+
         }
 
 
