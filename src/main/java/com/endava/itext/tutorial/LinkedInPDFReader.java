@@ -14,15 +14,17 @@ import java.io.IOException;
 
 public class LinkedInPDFReader {
 
+    private static String LINKEDIN_AUTHOR_NAME = "LinkedIn";
+
     PdfDocument pdfDocument;
+    String pdfAuthor;
 
     public LinkedInPDFReader(String filePath) throws IOException {
         this.pdfDocument = new PdfDocument(new PdfReader(filePath));
+        this.pdfAuthor = pdfDocument.getDocumentInfo().getAuthor();
     }
 
     public String getCurrentEmployer() {
-
-
         return null;
     }
 
@@ -60,7 +62,7 @@ public class LinkedInPDFReader {
 
     private boolean isLinkedInPdf() {
         //TODO: implement this
-        return true;
+        return pdfAuthor.equals(LINKEDIN_AUTHOR_NAME);
     }
 
     public <ITextExtractionStrategy> String getCurrentJobTitle() {
