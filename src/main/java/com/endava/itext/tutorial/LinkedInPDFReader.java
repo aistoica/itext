@@ -14,7 +14,7 @@ public class LinkedInPDFReader {
         this.pdfReader = new PdfReader(filePath);
     }
 
-    public String getCurrentEmployer() throws IOException {
+    public String getCurrentEmployer()  {
 
 
         return null;
@@ -33,7 +33,7 @@ public class LinkedInPDFReader {
     }
 
 
-    public void readPdf() throws IOException {
+    public void readPdf()  {
 
 
     }
