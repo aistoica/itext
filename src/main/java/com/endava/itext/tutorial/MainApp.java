@@ -10,16 +10,6 @@ import java.io.IOException;
 public class MainApp {
 
     public static void main(String[] args) throws IOException {
-        PDDocument document = null;
-        File file = new File(MainApp.class.getClassLoader().getResource("pdfs/BogdanBengaProfile.pdf").getPath());
-        document = PDDocument.load(file);
-        int pageNum = 0;
-        for( PDPage page : document.getPages() ){
-            for (COSName cosName : page.getResources().getXObjectNames()){
-                System.out.println(page.getResources().getXObject(cosName).toString());
-
-            }
-        }
 
 
     }
