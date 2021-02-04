@@ -12,6 +12,7 @@ import com.itextpdf.kernel.pdf.canvas.parser.listener.LocationTextExtractionStra
 
 import java.io.IOException;
 
+
 public class LinkedInPDFReader {
 
     private static String LINKEDIN_AUTHOR_NAME = "LinkedIn";
@@ -24,34 +25,101 @@ public class LinkedInPDFReader {
         this.pdfAuthor = pdfDocument.getDocumentInfo().getAuthor();
     }
 
-    public String getCurrentEmployer() {
-        if (isLinkedInPdf()) {
-            // Get the resultant text after applying the custom filter
-            String actualText = getActualText(1, false);
-            //in string you can split by \\nl and get it into an array
-            // extract the string after "at" or after "la" from the second line
+     public String getCurrentEmployer() {
 
-            return actualText;
-        } else {
-            return null;
+        if (isLinkedInPdf()) {
+            return getLinkedInCurrentEmployer();
         }
+        return null;
+    }
+    public String getCurrentJobTitle() {
+
+        if (isLinkedInPdf()) {
+            return getLinkedInCurrentJobTitle();
+        }
+        return null;
     }
 
     public String getTopSkills() {
 
         if (isLinkedInPdf()) {
-            // Get the resultant text after applying the custom filter
-            String actualText = getActualText(1, true);
-
-            //check if Top Skills and Languages exist in text, if true apply this one
-            String topSkills = CustomStringUtils.getBetweenStrings(actualText, "Top Skills\n", "\nLanguages");
-
-            //else check if "Aptitudini Principale" and "Languages" exist then update the call of topsSkills assignment
-            return topSkills.replace("\n", ", ");
-        } else {
-            return null;
+            return getLinkedInTopSkills();
         }
+        return null;
     }
+
+    private String getLinkedInTopSkills() {
+        // Get the resultant text after applying the custom filter
+        String actualText = getActualText(1, true);
+        return extractTopSkills(actualText);
+
+    }
+
+    private String extractCurrentJobTitle(String actualText) {
+        String[] textLines = actualText.split("\n");
+        for (int i = -1; i <0; i++) {
+            //  if (textLines[i].contains("la") || textLines[i].contains("at")) {
+            String currentJobTitle= "";
+            for (int j = i+3; j <= i+4; j++)
+            {
+                currentJobTitle+= " " + textLines[j++];
+            }
+currentJobTitle=currentJobTitle.substring(0, currentJobTitle.lastIndexOf(" "));
+            return currentJobTitle.substring(0, currentJobTitle.lastIndexOf(" "));
+            //  }
+        }
+        return null;
+    }
+
+
+    private String getLinkedInCurrentJobTitle() {
+        // Get the resultant text after applying the custom filter
+        String actualText = getActualText(1, false);
+        return extractCurrentJobTitle(actualText);
+
+    }
+
+
+
+    private String extractCurrentEmployer(String actualText) {
+        String[] textLines = actualText.split("\n");
+        for (int i = -1; i <0; i++) {
+          //  if (textLines[i].contains("la") || textLines[i].contains("at")) {
+                String currentEmployer = "";
+                for (int j = i+3; j <= i+4; j++)
+                {
+                    currentEmployer += " " + textLines[j++];
+                }
+          return   currentEmployer.substring(currentEmployer.lastIndexOf(" ")+1);
+          //  }
+        }
+        return null;
+    }
+
+
+    private String getLinkedInCurrentEmployer() {
+        // Get the resultant text after applying the custom filter
+        String actualText = getActualText(1, false);
+        return extractCurrentEmployer(actualText);
+
+    }
+
+    private String extractTopSkills(String actualText) {
+        String[] textLines = actualText.split("\n");
+        for (int i = 0; i < textLines.length; i++) {
+            if (textLines[i].contains("Top Skills") || textLines[i].contains("Aptitudini principale")) {
+                String topSkills = "";
+                for (int j = i+1; j < i+4; j++)
+                {
+                    topSkills += " " + textLines[j++];
+                }
+                topSkills = topSkills.trim().replace(" ", ", ");
+                return topSkills;
+            }
+        }
+        return null;
+    }
+
 
     private String getActualText(int pageNo, boolean isSummarySide) {
         float pageWidth = pdfDocument.getPage(pageNo).getPageSize().getWidth();
@@ -89,9 +157,6 @@ public class LinkedInPDFReader {
         return pdfAuthor.equals(LINKEDIN_AUTHOR_NAME);
     }
 
-    public String getCurrentJobTitle() {
-        return null;
-    }
 
     public Integer getTotalYearsOfExperience() {
         return null;
