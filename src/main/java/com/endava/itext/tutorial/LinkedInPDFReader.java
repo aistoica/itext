@@ -11,6 +11,8 @@ import com.itextpdf.kernel.pdf.canvas.parser.listener.LocationTextExtractionStra
 
 
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 
 
 public class LinkedInPDFReader {
@@ -25,13 +27,14 @@ public class LinkedInPDFReader {
         this.pdfAuthor = pdfDocument.getDocumentInfo().getAuthor();
     }
 
-     public String getCurrentEmployer() {
+    public String getCurrentEmployer() {
 
         if (isLinkedInPdf()) {
             return getLinkedInCurrentEmployer();
         }
         return null;
     }
+
     public String getCurrentJobTitle() {
 
         if (isLinkedInPdf()) {
@@ -57,14 +60,13 @@ public class LinkedInPDFReader {
 
     private String extractCurrentJobTitle(String actualText) {
         String[] textLines = actualText.split("\n");
-        for (int i = -1; i <0; i++) {
+        for (int i = -1; i < 0; i++) {
             //  if (textLines[i].contains("la") || textLines[i].contains("at")) {
-            String currentJobTitle= "";
-            for (int j = i+3; j <= i+4; j++)
-            {
-                currentJobTitle+= " " + textLines[j++];
+            String currentJobTitle = "";
+            for (int j = i + 3; j <= i + 4; j++) {
+                currentJobTitle += " " + textLines[j++];
             }
-currentJobTitle=currentJobTitle.substring(0, currentJobTitle.lastIndexOf(" "));
+            currentJobTitle = currentJobTitle.substring(0, currentJobTitle.lastIndexOf(" "));
             return currentJobTitle.substring(0, currentJobTitle.lastIndexOf(" "));
             //  }
         }
@@ -80,18 +82,14 @@ currentJobTitle=currentJobTitle.substring(0, currentJobTitle.lastIndexOf(" "));
     }
 
 
-
     private String extractCurrentEmployer(String actualText) {
         String[] textLines = actualText.split("\n");
-        for (int i = -1; i <0; i++) {
-          //  if (textLines[i].contains("la") || textLines[i].contains("at")) {
-                String currentEmployer = "";
-                for (int j = i+3; j <= i+4; j++)
-                {
-                    currentEmployer += " " + textLines[j++];
-                }
-          return   currentEmployer.substring(currentEmployer.lastIndexOf(" ")+1);
-          //  }
+        for (int i = -1; i < 0; i++) {
+            String currentEmployer = "";
+            for (int j = i + 3; j <= i + 4; j++) {
+                currentEmployer += " " + textLines[j++];
+            }
+            return currentEmployer.substring(currentEmployer.lastIndexOf(" ") + 1);
         }
         return null;
     }
@@ -109,8 +107,7 @@ currentJobTitle=currentJobTitle.substring(0, currentJobTitle.lastIndexOf(" "));
         for (int i = 0; i < textLines.length; i++) {
             if (textLines[i].contains("Top Skills") || textLines[i].contains("Aptitudini principale")) {
                 String topSkills = "";
-                for (int j = i+1; j < i+4; j++)
-                {
+                for (int j = i + 1; j < i + 4; j++) {
                     topSkills += " " + textLines[j++];
                 }
                 topSkills = topSkills.trim().replace(" ", ", ");
@@ -159,13 +156,29 @@ currentJobTitle=currentJobTitle.substring(0, currentJobTitle.lastIndexOf(" "));
 
 
     public Integer getTotalYearsOfExperience() {
-        return null;
-    }
-
-
-    public void readPdf() {
-
-
+        int years = 0;
+        int months = 0;
+        for (int page = 1; page <= pdfDocument.getNumberOfPages(); page++) {
+            final String textOnPage = getActualText(page, false);
+            String[] linesOnPage = textOnPage.split("\n");
+            for (String line : linesOnPage) {
+                if (line.contains("year")) {
+                    int yearIndex = line.indexOf("year");
+                    int pIndex = line.indexOf("(");
+                    years += Integer.valueOf(line.substring(pIndex + 1, yearIndex - 1).trim());
+                    if (line.contains("month")) {
+                        int monthIndex = line.indexOf("month");
+                        months += Integer.valueOf(line.substring(yearIndex + 5, monthIndex - 1).trim());
+                    }
+                } else if (line.contains("month")) {
+                    int monthIndex = line.indexOf("month");
+                    int pIndex = line.indexOf("(");
+                    months += Integer.valueOf(line.substring(pIndex + 1, monthIndex - 1).trim());
+                }
+            }
+        }
+        years += months / 12;
+        return years;
     }
 
 

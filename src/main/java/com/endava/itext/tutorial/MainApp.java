@@ -20,6 +20,10 @@ public class MainApp {
             String currentEmployer = linkedInPDFReader.getCurrentEmployer();
             System.out.println("Current Employer is:");
             System.out.println(currentEmployer);
+
+            int yearsOfExperience = linkedInPDFReader.getTotalYearsOfExperience();
+            System.out.println("Years of Experience is:");
+            System.out.println(yearsOfExperience);
         } catch (IOException e) {
             e.printStackTrace();
         }
