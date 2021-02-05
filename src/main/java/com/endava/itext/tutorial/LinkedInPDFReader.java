@@ -60,18 +60,16 @@ public class LinkedInPDFReader {
 
     private String extractCurrentJobTitle(String actualText) {
         String[] textLines = actualText.split("\n");
-        for (int i = -1; i < 0; i++) {
-            //  if (textLines[i].contains("la") || textLines[i].contains("at")) {
+
+
             String currentJobTitle = "";
-            for (int j = i + 3; j <= i + 4; j++) {
-                currentJobTitle += " " + textLines[j++];
-            }
-            currentJobTitle = currentJobTitle.substring(0, currentJobTitle.lastIndexOf(" "));
+
+
+            currentJobTitle += " " + textLines[2];
+           currentJobTitle= currentJobTitle.substring(0, currentJobTitle.lastIndexOf(" "));
             return currentJobTitle.substring(0, currentJobTitle.lastIndexOf(" "));
             //  }
         }
-        return null;
-    }
 
 
     private String getLinkedInCurrentJobTitle() {
@@ -82,15 +80,19 @@ public class LinkedInPDFReader {
     }
 
 
+
     private String extractCurrentEmployer(String actualText) {
         String[] textLines = actualText.split("\n");
-        for (int i = -1; i < 0; i++) {
-            String currentEmployer = "";
-            for (int j = i + 3; j <= i + 4; j++) {
-                currentEmployer += " " + textLines[j++];
-            }
-            return currentEmployer.substring(currentEmployer.lastIndexOf(" ") + 1);
-        }
+
+            if (textLines[2].contains("la") || textLines[2].contains("at")) {
+                String currentEmployer = "";
+
+
+                    currentEmployer += " " + textLines[2];
+
+          return   currentEmployer.substring(currentEmployer.lastIndexOf(" ")+1);
+           }
+
         return null;
     }
 
