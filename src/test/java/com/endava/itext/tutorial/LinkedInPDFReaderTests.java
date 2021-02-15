@@ -11,7 +11,7 @@ public class LinkedInPDFReaderTests {
     @Test
     public void testCreateReader() throws IOException {
         String pdfPath = "/pdfs/BogdanBengaProfile.pdf";
-        LinkedInPDFReader linkedInPDFReader = new LinkedInPDFReader(pdfPath);
+        LinkedInPDFReaderENG linkedInPDFReader = new LinkedInPDFReaderENG(pdfPath);
         Assertions.assertNotNull(linkedInPDFReader);
     }
 

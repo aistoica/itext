@@ -11,6 +11,8 @@ import com.itextpdf.kernel.pdf.canvas.parser.listener.LocationTextExtractionStra
 
 
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 
 
 public class LinkedInPDFReader {
@@ -20,9 +22,11 @@ public class LinkedInPDFReader {
     PdfDocument pdfDocument;
     String pdfAuthor;
 
+
     public LinkedInPDFReader(String filePath) throws IOException {
         this.pdfDocument = new PdfDocument(new PdfReader(filePath));
         this.pdfAuthor = pdfDocument.getDocumentInfo().getAuthor();
+
     }
 
     public String getCurrentEmployer() {
@@ -41,21 +45,6 @@ public class LinkedInPDFReader {
         return null;
     }
 
-    public String getTopSkills() {
-
-        if (isLinkedInPdf()) {
-            return getLinkedInTopSkills();
-        }
-        return null;
-    }
-
-    public String getEducation() {
-
-        if (isLinkedInPdf()) {
-            return getLinkedInEducation();
-        }
-        return null;
-    }
 
     public String getLanguages() {
 
@@ -72,50 +61,15 @@ public class LinkedInPDFReader {
         }
         return null;
     }
+    public  String getPDFLanguage() {
 
-
-    private String extractEducation() {
-        String education = "";
-        int noOfPages = pdfDocument.getNumberOfPages();
-
-        System.out.println("Number of pages = " + noOfPages);
-
-        for (int page = 1; page <= noOfPages; page++) {
-            String actualPageText = getActualText(page, false);
-            String[] textLines = actualPageText.split("\n");
-            System.out.println("======================================================");
-            System.out.println(actualPageText);
-            System.out.println("======================================================");
-            for (int i = 0; i< textLines.length; i++){
-                String line = textLines[i];
-                if (line.contains("Studii") || line.contains("Education")){
-                    for (int j = i+1; j < textLines.length; j++){
-                        education += textLines[j];
-                    }
-                    return education;
-                }
-            }
-            return "N/A";
+        if (isLinkedInPdf()) {
+            return getLinkedInPdfLanguage();
         }
-        return "N/A";
+        return null;
     }
 
 
-
-
-
-    private String getLinkedInEducation() {
-        // Get the resultant text after applying the custom filter
-         return extractEducation();
-
-    }
-
-    private String getLinkedInTopSkills() {
-        // Get the resultant text after applying the custom filter
-        String actualText = getActualText(1, true);
-        return extractTopSkills(actualText);
-
-    }
     private String getLinkedInLanguages() {
         // Get the resultant text after applying the custom filter
         String actualText = getActualText(1, true);
@@ -137,7 +91,7 @@ public class LinkedInPDFReader {
                 String languages = "";
                 for (int j = i+1; j < i+5; j++)
                 {
-                    languages += " " + textLines[j++];
+                    languages += " " + textLines[j]+"\n";
                 }
 
                 return languages ;
@@ -153,7 +107,7 @@ public class LinkedInPDFReader {
                 i++;
                 String certifs = "";
 
-                    certifs += " " + textLines[i]+textLines[i+1];
+                    certifs += " " + textLines[i]+textLines[i+1] +"\n";
 
 
                 return certifs ;
@@ -202,6 +156,50 @@ public class LinkedInPDFReader {
     }
 
 
+
+    private String extractPDFLanguage(String actualText) {
+        String[] textLines = actualText.split("\n");
+
+
+        if (textLines[1].equals("Contact")) {
+            String currentLanguage = "English";
+            return currentLanguage;
+        } else if (textLines[1].equals("Contactați")) {
+            String currentLanguage = "Romanian";
+            return currentLanguage;
+        }
+        else if (textLines[1].equals("Kontakt") && actualText.contains("Mest repræsenterede")) {
+            String currentLanguage = "Danish";
+            return currentLanguage;
+        }
+        else if (textLines[1].equals("Coordonnées")) {
+            String currentLanguage = "French";
+            return currentLanguage;
+        }
+        else if (textLines[1].equals("Kontakt") && actualText.contains("Top-Kenntnisse")) {
+            String currentLanguage = "German";
+            return currentLanguage;
+        }
+        else if (textLines[1].equals("Способы связаться")) {
+            String currentLanguage = "Russian";
+            return currentLanguage;
+        }
+        else if (textLines[1].equals("Contactar")) {
+            String currentLanguage = "Spanish";
+            return currentLanguage;
+        }
+        else {
+
+            return null;
+        }
+   }
+    private String getLinkedInPdfLanguage() {
+        // Get the resultant text after applying the custom filter
+        String actualText=getActualText(1,true);
+        return  extractPDFLanguage(actualText) ;
+
+    }
+
     private String getLinkedInCurrentEmployer() {
         // Get the resultant text after applying the custom filter
         String actualText = getActualText(1, false);
@@ -209,24 +207,10 @@ public class LinkedInPDFReader {
 
     }
 
-    private String extractTopSkills(String actualText) {
-        String[] textLines = actualText.split("\n");
-        for (int i = 0; i < textLines.length; i++) {
-            if (textLines[i].contains("Top Skills") || textLines[i].contains("Aptitudini principale")) {
-                String topSkills = "";
-                for (int j = i+1; j < i+4; j++)
-                {
-                    topSkills += " " + textLines[j++];
-                }
-                topSkills = topSkills.trim().replace(" ", ", ");
-                return topSkills;
-            }
-        }
-        return null;
-    }
 
 
-    private String getActualText(int pageNo, boolean isSummarySide) {
+
+    String getActualText(int pageNo, boolean isSummarySide) {
         float pageWidth = pdfDocument.getPage(pageNo).getPageSize().getWidth();
         float pageHeight = pdfDocument.getPage(pageNo).getPageSize().getHeight();
 
@@ -262,62 +246,6 @@ public class LinkedInPDFReader {
         return pdfAuthor.equals(LINKEDIN_AUTHOR_NAME);
     }
 
-
-    public Integer getTotalYearsOfExperience() {
-
-        int years = 0;
-
-        int months = 0;
-
-        for (int page = 1; page <= pdfDocument.getNumberOfPages(); page++) {
-
-            final String textOnPage = getActualText(page, false);
-
-            String[] linesOnPage = textOnPage.split("\n");
-
-            for (String line : linesOnPage) {
-
-                if (line.contains("year")) {
-
-                    int yearIndex = line.indexOf("year");
-
-                    int pIndex = line.indexOf("(");
-
-                    years += Integer.valueOf(line.substring(pIndex + 1, yearIndex - 1).trim());
-
-                    if (line.contains("month")) {
-
-                        int monthIndex = line.indexOf("month");
-
-                        months += Integer.valueOf(line.substring(yearIndex + 5, monthIndex - 1).trim());
-
-                    }
-
-                } else if (line.contains("month")) {
-
-                    int monthIndex = line.indexOf("month");
-
-                    int pIndex = line.indexOf("(");
-
-                    months += Integer.valueOf(line.substring(pIndex + 1, monthIndex - 1).trim());
-
-                }
-
-            }
-
-        }
-
-        years += months / 12;
-
-        return years;
-
-    }
-
-
-    public void readPdf() {
-
-
-    }
 
 
 }
