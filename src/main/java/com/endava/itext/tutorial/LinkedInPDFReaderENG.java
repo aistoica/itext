@@ -113,7 +113,7 @@ public class LinkedInPDFReaderENG extends  LinkedInPDFReader{
                 String line = textLines[i];
                 if (line.contains("Education")){
                     for (int j = i+1; j < textLines.length; j++){
-                        education += textLines[j];
+                        education += textLines[j]+"\n";
 
                     }
                     education = education.substring(0, education.lastIndexOf("Page"));

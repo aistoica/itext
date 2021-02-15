@@ -114,14 +114,7 @@ public class LinkedInPDFReaderRO extends LinkedInPDFReaderENG {
             String[] textLines = actualPageText.split("\n");
             for (int i = 0; i< textLines.length; i++){
                 String line = textLines[i];
-
-                String stringToSearch = line;
-                String regex = "\\(\\d+ Studii";
-
-                Pattern p = Pattern.compile(regex);// the pattern to search for
-
-                Matcher m = p.matcher(stringToSearch);
-                if (m.find()){
+               if(line.equalsIgnoreCase("Education")){
                     System.out.println("Found education");
                     for (int j = i+1; j < textLines.length; j++){
                         education += textLines[j];

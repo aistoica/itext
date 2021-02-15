@@ -89,11 +89,17 @@ public class LinkedInPDFReader {
         for (int i = 0; i < textLines.length; i++) {
             if (textLines[i].contains("Languages"))  {
                 String languages = "";
-                for (int j = i+1; j < i+5; j++)
+                for (int j = i+1; j < i+6; j++)
                 {
+//                    if(textLines[i].contains("Certifications") )
+//                    {
+//                        languages=languages.replaceAll("Certifications","");
+//                    }
                     languages += " " + textLines[j]+"\n";
-                }
 
+
+                }
+                languages = languages.substring(0, languages.lastIndexOf("Certifications"));
                 return languages ;
             }
         }
