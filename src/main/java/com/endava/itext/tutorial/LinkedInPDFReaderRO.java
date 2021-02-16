@@ -61,38 +61,37 @@ public class LinkedInPDFReaderRO extends LinkedInPDFReaderENG {
 
             for (String line : linesOnPage) {
 
-                String stringToSearch = line;
                 String regex = "\\(\\d+ an";
-                String regex2 = "\\(\\d+ luni";
-                String regex3 = "\\(\\d+ lună";
+                String regex2 = "\\d+ luni\\)";
+                String regex3 = "\\d+ lună\\)";
                 Pattern p = Pattern.compile(regex);// the pattern to search for
                 Pattern p1 = Pattern.compile(regex2);
                 Pattern p2 = Pattern.compile(regex3);
-                Matcher m = p.matcher(stringToSearch);
-                Matcher n = p1.matcher(stringToSearch);
-                Matcher o = p2.matcher(stringToSearch);
+                Matcher yearMatcherRo = p.matcher(line);
+                Matcher yearMatcherRo2  = p1.matcher(line);
+                Matcher yearMatcherRo3 = p2.matcher(line);
 
-                if (m.find()) {
+                if (yearMatcherRo.find()) {
                     System.out.println(line + " Is a match");
 
                     int yearIndex = line.indexOf(regex);
 
                     int pIndex = line.indexOf("(");
-//                    years += Integer.valueOf(line.substring(pIndex + 1, yearIndex - 1).trim());
+               //    years += Integer.valueOf(line.substring(pIndex + 1, yearIndex - 1).trim());
 
-                    if (n.find()) {
+                    if (yearMatcherRo2.find()) {
                         int monthIndex = line.indexOf(regex2);
                         System.out.println(line + " Is a match");
-//                        months += Integer.valueOf(line.substring(yearIndex + 5, monthIndex - 1).trim());
+                    //   months += Integer.valueOf(line.substring(yearIndex + 5, monthIndex - 1).trim());
                     }
                 }
-                else if (o.find()) {
+                else if (yearMatcherRo3.find()) {
 
                     int monthIndex = line.indexOf(regex3);
 
                     int pIndex = line.indexOf("(");
                     System.out.println(line + " Is a match");
-//                    months += Integer.valueOf(line.substring(pIndex + 1, monthIndex - 1).trim());
+             //      months += Integer.valueOf(line.substring(pIndex + 1, monthIndex - 1).trim());
 
                 }
 
@@ -112,19 +111,19 @@ public class LinkedInPDFReaderRO extends LinkedInPDFReaderENG {
         for (int page = 1; page <= noOfPages; page++) {
             String actualPageText = getActualText(page, false);
             String[] textLines = actualPageText.split("\n");
+
             for (int i = 0; i< textLines.length; i++){
                 String line = textLines[i];
-               if(line.equalsIgnoreCase("Education")){
-                    System.out.println("Found education");
-                    for (int j = i+1; j < textLines.length; j++){
-                        education += textLines[j];
+                if (line.contains("Universitat")){
+                    for (int j = i; j < textLines.length; j++){
+                        education += textLines[j]+"\n";
 
                     }
                     education = education.substring(0, education.lastIndexOf("Page"));
                     return education;
                 }
-                return "N/A";
             }
+
         }
         return "N/A";
     }

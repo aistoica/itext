@@ -31,15 +31,15 @@ public class LinkedInPDFReaderDAN extends LinkedInPDFReader {
 
     private String extractTopSkills(String actualText) {
         String[] textLines = actualText.split("\n");
-
-
         for (int i = 0; i < textLines.length; i++) {
-            if (textLines[i].contains("Mest repræsenterede kompetencer")) {
-                String topSkills = "";
-                for (int j = i + 1; j < i + 4; j++) {
-                    topSkills += " " + textLines[j++];
-                }
 
+            if (textLines[i].contains("kompetencer")) {
+                String topSkills = "";
+                for (int j = i+1; j < i+4; j++)
+                {
+                    topSkills += " " + textLines[j]+"\n";
+
+                }
                 return topSkills;
             }
         }
@@ -101,16 +101,14 @@ public class LinkedInPDFReaderDAN extends LinkedInPDFReader {
     private String extractEducation() {
         String education = "";
         int noOfPages = pdfDocument.getNumberOfPages();
-
         for (int page = 1; page <= noOfPages; page++) {
             String actualPageText = getActualText(page, false);
             String[] textLines = actualPageText.split("\n");
-
             for (int i = 0; i < textLines.length; i++) {
                 String line = textLines[i];
-                if (line.contains("Education")) {
+                if (line.contains("Uddannelse")) {
                     for (int j = i + 1; j < textLines.length; j++) {
-                        education += textLines[j];
+                        education += textLines[j]+"\n";
 
                     }
                     education = education.substring(0, education.lastIndexOf("Page"));

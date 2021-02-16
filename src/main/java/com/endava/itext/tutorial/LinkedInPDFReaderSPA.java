@@ -79,9 +79,9 @@ public class LinkedInPDFReaderSPA  extends LinkedInPDFReader{
 
                     }
 
-                } else if (line.contains("meses")) {
+                } else if (line.contains("mes")) {
 
-                    int monthIndex = line.indexOf("meses");
+                    int monthIndex = line.indexOf("mes");
 
                     int pIndex = line.indexOf("(");
 
@@ -110,10 +110,10 @@ public class LinkedInPDFReaderSPA  extends LinkedInPDFReader{
                 String line = textLines[i];
                 if (line.contains("Educación")){
                     for (int j = i+1; j < textLines.length; j++){
-                        education += textLines[j];
+                        education += textLines[j]+"\n";
 
                     }
-                    education = education.substring(0, education.lastIndexOf(" Page"));
+                    education = education.substring(0, education.lastIndexOf("Page"));
                     return education;
                 }
             }
