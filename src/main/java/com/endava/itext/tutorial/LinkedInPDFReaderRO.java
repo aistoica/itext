@@ -72,13 +72,13 @@ public class LinkedInPDFReaderRO extends LinkedInPDFReaderENG {
         int months = 0;
         String regex = "\\d+ lun.\\)";
 
-        Pattern yearPattern = Pattern.compile(regex);   // the pattern to search for
-        Matcher yearMatcher = yearPattern.matcher(line);
+        Pattern monthPattern = Pattern.compile(regex);   // the pattern to search for
+        Matcher monthMatcher = monthPattern.matcher(line);
 
         // now try to find at least one match
-        if (yearMatcher.find()) {
-            int startIndex = yearMatcher.start();
-            int endIndex = yearMatcher.end();
+        if (monthMatcher.find()) {
+            int startIndex = monthMatcher.start();
+            int endIndex = monthMatcher.end();
             months = Integer.valueOf(line.substring(startIndex, endIndex - 6));
             System.out.println("line = " + line);
             System.out.println("months = " + months);

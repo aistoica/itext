@@ -10,7 +10,7 @@ public class CandidateDetails {
     private String linkedInProfile; //url
     private Set<String> topSkills;  //set de stringuri
     private Set<String> languages; //set de string-uri
-    private Set <String> certifications; //set de string-uri
+    private Set<String> certifications; //set de string-uri
     private double yearsOfExperience;
     private String currentCompany;
     private String currentJobTitle;
@@ -68,11 +68,9 @@ public class CandidateDetails {
         this.currentCompany = builder.getCurrentCompany();
         this.currentJobTitle = builder.getCurrentJobTitle();
         this.education = Collections.singletonList(builder.getEducation());
-
     }
 
     public static class CandidateDetailsBuilder {
-
 
         private String name;
         private String email;
@@ -165,22 +163,11 @@ public class CandidateDetails {
             this.education = education;
         }
 
-        public CandidateDetailsBuilder(String name, String email, String linkedInProfile, String topSkills,
-                                       String languages, String certifications, int yearsOfExperience, String currentCompany,
-                                       String currentJobTitle, String education) {
+        public CandidateDetailsBuilder(String name, String email, String linkedInProfile) {
             this.name = name;
             this.email = email;
             this.linkedInProfile = linkedInProfile;
-            this.topSkills = topSkills;
-            this.languages = languages;
-            this.certifications = certifications;
-            this.yearsOfExperience = yearsOfExperience;
-            this.currentCompany = currentCompany;
-            this.currentJobTitle = currentJobTitle;
-            this.education = education;
-
         }
-
 
         public CandidateDetails build() {
             return new CandidateDetails(this);
