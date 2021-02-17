@@ -2,14 +2,15 @@ package com.endava.itext.tutorial;
 
 import java.util.Collections;
 import java.util.List;
+import java.util.Set;
 
 public class CandidateDetails {
     private String name;
     private String email;
     private String linkedInProfile; //url
-    private String topSkills;  //set de stringuri
-    private String languages; //set de string-uri
-    private String certifications; //set de string-uri
+    private Set<String> topSkills;  //set de stringuri
+    private Set<String> languages; //set de string-uri
+    private Set <String> certifications; //set de string-uri
     private double yearsOfExperience;
     private String currentCompany;
     private String currentJobTitle;
@@ -28,15 +29,15 @@ public class CandidateDetails {
         return linkedInProfile;
     }
 
-    public String getTopSkills() {
+    public Set<String> getTopSkills() {
         return topSkills;
     }
 
-    public String getLanguages() {
+    public Set<String> getLanguages() {
         return languages;
     }
 
-    public String getCertifications() {
+    public Set<String> getCertifications() {
         return certifications;
     }
 
@@ -60,9 +61,9 @@ public class CandidateDetails {
         this.name = builder.getName();
         this.email = builder.getEmail();
         this.linkedInProfile = builder.getLinkedInProfile();
-        this.topSkills = builder.getTopSkills();
-        this.languages = builder.getLanguages();
-        this.certifications = builder.getCertifications();
+        this.topSkills = Collections.singleton(builder.getTopSkills());
+        this.languages = Collections.singleton(builder.getLanguages());
+        this.certifications = Collections.singleton(builder.getCertifications());
         this.yearsOfExperience = builder.getYearsOfExperience();
         this.currentCompany = builder.getCurrentCompany();
         this.currentJobTitle = builder.getCurrentJobTitle();

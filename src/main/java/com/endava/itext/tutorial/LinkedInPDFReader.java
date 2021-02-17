@@ -11,8 +11,6 @@ import com.itextpdf.kernel.pdf.canvas.parser.listener.LocationTextExtractionStra
 
 
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
 
 
 public class LinkedInPDFReader {

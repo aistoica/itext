@@ -61,25 +61,25 @@ public class LinkedInPDFReaderFR extends LinkedInPDFReader {
 
             for (String line : linesOnPage) {
 
-                if (line.contains("year")) {
+                if (line.contains("an")) {
 
-                    int yearIndex = line.indexOf("year");
+                    int yearIndex = line.indexOf("an");
 
                     int pIndex = line.indexOf("(");
 
                     years += Integer.valueOf(line.substring(pIndex + 1, yearIndex - 1).trim());
 
-                    if (line.contains("månen")) {
+                    if (line.contains("mois")) {
 
-                        int monthIndex = line.indexOf("månen");
+                        int monthIndex = line.indexOf("mois");
 
                         months += Integer.valueOf(line.substring(yearIndex + 5, monthIndex - 1).trim());
 
                     }
 
-                } else if (line.contains("month")) {
+                } else if (line.contains("mois")) {
 
-                    int monthIndex = line.indexOf("month");
+                    int monthIndex = line.indexOf("mois");
 
                     int pIndex = line.indexOf("(");
 
