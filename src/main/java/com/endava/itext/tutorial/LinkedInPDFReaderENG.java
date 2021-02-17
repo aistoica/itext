@@ -4,7 +4,7 @@ import com.itextpdf.kernel.pdf.PdfDocument;
 
 import java.io.IOException;
 
-public class LinkedInPDFReaderENG extends  LinkedInPDFReader{
+public class LinkedInPDFReaderENG extends LinkedInPDFReader {
     private static String LINKEDIN_AUTHOR_NAME = "LinkedIn";
 
 
@@ -25,21 +25,21 @@ public class LinkedInPDFReaderENG extends  LinkedInPDFReader{
 
     public String getTopSkills() {
 
-        if (isLinkedInPdf() ) {
+        if (isLinkedInPdf()) {
             return getLinkedInTopSkills();
         }
         return null;
     }
+
     private String extractTopSkills(String actualText) {
         String[] textLines = actualText.split("\n");
 
 
         for (int i = 0; i < textLines.length; i++) {
-            if (textLines[i].contains("Top Skills") ) {
+            if (textLines[i].contains("Top Skills")) {
                 String topSkills = "";
-                for (int j = i+1; j < i+4; j++)
-                {
-                    topSkills += " " + textLines[j]+"\n";
+                for (int j = i + 1; j < i + 4; j++) {
+                    topSkills += " " + textLines[j] + "\n";
                 }
 
                 return topSkills;
@@ -49,58 +49,33 @@ public class LinkedInPDFReaderENG extends  LinkedInPDFReader{
     }
 
 
-
-
     public Integer getTotalYearsOfExperience() {
 
-            int years = 0;
-
-            int months = 0;
-
-            for (int page = 1; page <= pdfDocument.getNumberOfPages(); page++) {
-
-                final String textOnPage = getActualText(page, false);
-
-                String[] linesOnPage = textOnPage.split("\n");
-
-                for (String line : linesOnPage) {
-
-                    if (line.contains("year")) {
-
-                        int yearIndex = line.indexOf("year");
-
-                        int pIndex = line.indexOf("(");
-
-                        years += Integer.valueOf(line.substring(pIndex + 1, yearIndex - 1).trim());
-
-                        if (line.contains("month")) {
-
-                            int monthIndex = line.indexOf("month");
-
-                            months += Integer.valueOf(line.substring(yearIndex + 5, monthIndex - 1).trim());
-
-                        }
-
-                    } else if (line.contains("month")) {
-
+        int years = 0;
+        int months = 0;
+        for (int page = 1; page <= pdfDocument.getNumberOfPages(); page++) {
+            final String textOnPage = getActualText(page, false);
+            String[] linesOnPage = textOnPage.split("\n");
+            for (String line : linesOnPage) {
+                if (line.contains("year")) {
+                    int yearIndex = line.indexOf("year");
+                    int pIndex = line.indexOf("(");
+                    years += Integer.valueOf(line.substring(pIndex + 1, yearIndex - 1).trim());
+                    if (line.contains("month")) {
                         int monthIndex = line.indexOf("month");
-
-                        int pIndex = line.indexOf("(");
-
-                        months += Integer.valueOf(line.substring(pIndex + 1, monthIndex - 1).trim());
-
+                        months += Integer.valueOf(line.substring(yearIndex + 5, monthIndex - 1).trim());
                     }
-
+                } else if (line.contains("month")) {
+                    int monthIndex = line.indexOf("month");
+                    int pIndex = line.indexOf("(");
+                    months += Integer.valueOf(line.substring(pIndex + 1, monthIndex - 1).trim());
                 }
-
             }
-
-            years += months / 12;
-
-            return years;
-
-
+        }
+        years += months / 12;
+        return years;
     }
+
     private String extractEducation() {
         String education = "";
         int noOfPages = pdfDocument.getNumberOfPages();
@@ -109,11 +84,11 @@ public class LinkedInPDFReaderENG extends  LinkedInPDFReader{
             String actualPageText = getActualText(page, false);
             String[] textLines = actualPageText.split("\n");
 
-            for (int i = 0; i< textLines.length; i++){
+            for (int i = 0; i < textLines.length; i++) {
                 String line = textLines[i];
-                if (line.contains("Education")){
-                    for (int j = i+1; j < textLines.length; j++){
-                        education += textLines[j]+"\n";
+                if (line.contains("Education")) {
+                    for (int j = i + 1; j < textLines.length; j++) {
+                        education += textLines[j] + "\n";
 
                     }
                     education = education.substring(0, education.lastIndexOf("Page"));
@@ -124,15 +99,12 @@ public class LinkedInPDFReaderENG extends  LinkedInPDFReader{
         }
         return "N/A";
     }
+
     private String getLinkedInEducation() {
         // Get the resultant text after applying the custom filter
         return extractEducation();
 
     }
-
-
-
-
 
 
     private String getLinkedInTopSkills() {
@@ -141,7 +113,6 @@ public class LinkedInPDFReaderENG extends  LinkedInPDFReader{
         return extractTopSkills(actualText);
 
     }
-
 
 
     private boolean isLinkedInPdf() {
