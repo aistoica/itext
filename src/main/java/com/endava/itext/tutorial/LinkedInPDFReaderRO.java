@@ -1,4 +1,5 @@
 package com.endava.itext.tutorial;
+
 import java.util.regex.Pattern;
 import java.util.regex.Matcher;
 
@@ -27,6 +28,7 @@ public class LinkedInPDFReaderRO extends LinkedInPDFReaderENG {
         }
         return null;
     }
+
     private String extractTopSkills(String actualText) {
         String[] textLines = actualText.split("\n");
 
@@ -34,9 +36,8 @@ public class LinkedInPDFReaderRO extends LinkedInPDFReaderENG {
         for (int i = 0; i < textLines.length; i++) {
             if (textLines[i].contains("Aptitudini principale")) {
                 String topSkills = "";
-                for (int j = i+1; j < i+4; j++)
-                {
-                    topSkills += " " + textLines[j]+"\n";
+                for (int j = i + 1; j < i + 4; j++) {
+                    topSkills += " " + textLines[j] + "\n";
 
                 }
 
@@ -47,190 +48,61 @@ public class LinkedInPDFReaderRO extends LinkedInPDFReaderENG {
     }
 
 
-//    public Integer getTotalYearsOfExperience() {
-//
-//        int years = 0;
-//
-//        int months = 0;
-//
-//        for (int page = 1; page <= pdfDocument.getNumberOfPages(); page++) {
-//
-//            final String textOnPage = getActualText(page, false);
-//
-//            String[] linesOnPage = textOnPage.split("\n");
-//
-//            for (String line : linesOnPage) {
-//
-//                String regex = "\\(\\d+ an";
-//
-//                String regex2 = "\\d+ luni\\)";
-//
-//                String regex3 = "\\d+ lună\\)";
-//
-//                Pattern p = Pattern.compile(regex);// the pattern to search for
-//
-//                Pattern p1 = Pattern.compile(regex2);
-//
-//                Pattern p2 = Pattern.compile(regex3);
-//
-//                Matcher yearMatcherRo = p.matcher(line);
-//
-//                Matcher monthMatcherRo  = p1.matcher(line);
-//
-//                Matcher monthsMatcherRo = p2.matcher(line);
-//                if (yearMatcherRo.find()) {
-//
-//                    System.out.println(line + " Is a match");
-//
-//                    int yearIndex =yearMatcherRo.end();
-//                    int pIndex =yearMatcherRo.start();;
-//
-//                        years += Integer.valueOf(line.substring(pIndex + 1, yearIndex - 1).trim());
-//
-//                    if (monthMatcherRo.find()) {
-//
-//                        int monthIndex = monthMatcherRo.start();
-//
-//                        System.out.println(line + " Is a match");
-//
-//                           months += Integer.valueOf(line.substring(yearIndex + 1, monthIndex - 1).trim());
-//
-//                    }
-//
-//                }
-//
-//                else if (monthsMatcherRo.find()) {
-//
-//
-//
-//                    int monthIndex =monthMatcherRo.start();
-//
-//
-//
-//                    int pIndex =yearMatcherRo.start();;
-//
-//                    System.out.println(line + " Is a match");
-//
-//                         months += Integer.valueOf(line.substring(pIndex + 1, monthIndex - 1).trim());
-//
-//                }
-//
-//
-//
-//            }
-//
-//            years += months / 12;
-//            return years;
-//
-//
-//
-//        }
-//
-//        return null;
-//
-//    }
-
-
     public Integer getTotalYearsOfExperience() {
 
         int years = 0;
-
         int months = 0;
-
         for (int page = 1; page <= pdfDocument.getNumberOfPages(); page++) {
-
             final String textOnPage = getActualText(page, false);
-
             String[] linesOnPage = textOnPage.split("\n");
-
             for (String line : linesOnPage) {
-
                 years += getYearsForLine(line);
-
                 months += getMonthsForLine(line);
-
             }
-
         }
 
         years += months / 12;
 
-
-
         return years;
+
 
     }
 
-
-
     private int getMonthsForLine(String line) {
-
         int months = 0;
-
         String regex = "\\d+ lun.\\)";
 
         Pattern monthPattern = Pattern.compile(regex);   // the pattern to search for
-
         Matcher monthMatcher = monthPattern.matcher(line);
 
         // now try to find at least one match
-
         if (monthMatcher.find()) {
-
             int startIndex = monthMatcher.start();
-
             int endIndex = monthMatcher.end();
-
             months = Integer.valueOf(line.substring(startIndex, endIndex - 6));
-
             System.out.println("line = " + line);
-
             System.out.println("months = " + months);
-
         }
-
         return months;
-
     }
-
-
 
     private int getYearsForLine(String line) {
-
         int years = 0;
-
         String regex = "\\(\\d+ an";
 
-
-
         Pattern yearPattern = Pattern.compile(regex);   // the pattern to search for
-
         Matcher yearMatcher = yearPattern.matcher(line);
 
-
-
         // now try to find at least one match
-
         if (yearMatcher.find()) {
-
             int startIndex = yearMatcher.start();
-
             int endIndex = yearMatcher.end();
-
             years = Integer.valueOf(line.substring(startIndex + 1, endIndex - 3));
-
             System.out.println("line = " + line);
-
             System.out.println("years = " + years);
-
         }
-
         return years;
-
     }
-
-
-
 
     private String extractEducation() {
         String education = "";
@@ -240,11 +112,11 @@ public class LinkedInPDFReaderRO extends LinkedInPDFReaderENG {
             String actualPageText = getActualText(page, false);
             String[] textLines = actualPageText.split("\n");
 
-            for (int i = 0; i< textLines.length; i++){
+            for (int i = 0; i < textLines.length; i++) {
                 String line = textLines[i];
-                if (line.contains("Universit")){
-                    for (int j = i; j < textLines.length; j++){
-                        education += textLines[j]+"\n";
+                if (line.contains("Universit")) {
+                    for (int j = i; j < textLines.length; j++) {
+                        education += textLines[j] + "\n";
 
                     }
                     education = education.substring(0, education.lastIndexOf("Page"));
@@ -255,6 +127,7 @@ public class LinkedInPDFReaderRO extends LinkedInPDFReaderENG {
         }
         return "N/A";
     }
+
     private String getLinkedInEducation() {
         // Get the resultant text after applying the custom filter
         return extractEducation();
@@ -267,7 +140,6 @@ public class LinkedInPDFReaderRO extends LinkedInPDFReaderENG {
         return extractTopSkills(actualText);
 
     }
-
 
 
     private boolean isLinkedInPdf() {
