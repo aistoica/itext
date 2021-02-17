@@ -145,44 +145,9 @@ public class LinkedInPDFReaderRO extends LinkedInPDFReaderENG {
 
             for (String line : linesOnPage) {
 
-                if (line.contains("an")) {
+                years += getYearsForLine(line);
 
-                    int yearIndex = line.indexOf("an");
-
-                    int pIndex = line.indexOf("(");
-
-                    years += Integer.valueOf(line.substring(pIndex + 1, yearIndex - 1).trim());
-
-                    if (line.contains("lună")) {
-
-                        int monthIndex = line.indexOf("lună");
-
-                        months += Integer.valueOf(line.substring(yearIndex + 5, monthIndex - 1).trim());
-
-                    } else if (line.contains("luni")){
-                        int monthIndex = line.indexOf("luni");
-
-                        months += Integer.valueOf(line.substring(yearIndex + 5, monthIndex - 1).trim());
-                    }
-
-
-                }
-                else if (line.contains("lună")) {
-
-                    int monthIndex = line.indexOf("lună");
-
-                    int pIndex = line.indexOf("(");
-
-                    months += Integer.valueOf(line.substring(pIndex + 1, monthIndex - 1).trim());
-
-                } else if (line.contains("luni"))
-                {
-                    int monthIndex = line.indexOf("luni");
-
-                    int pIndex = line.indexOf("(");
-
-                    months += Integer.valueOf(line.substring(pIndex + 1, monthIndex - 1).trim());
-                }
+                months += getMonthsForLine(line);
 
             }
 
@@ -190,56 +155,81 @@ public class LinkedInPDFReaderRO extends LinkedInPDFReaderENG {
 
         years += months / 12;
 
-        return years;
 
+
+        return years;
 
     }
 
-//    public Integer getMonthsOfExperience( ) {
-//
-//        int months = 0;
-//
-//        for (int page = 1; page <= pdfDocument.getNumberOfPages(); page++) {
-//
-//            final String textOnPage = getActualText(page, false);
-//
-//            String[] linesOnPage = textOnPage.split("\n");
-//
-//            for (String line : linesOnPage) {
-//
-//                String regex = "\\d+ luni\\)";
-//                Pattern p = Pattern.compile(regex);
-//                Matcher monthMatcherRo = p.matcher(line);
-//
-//                if (line.contains("luni")) {
-//                    System.out.println(line + " Is a match");
-//                    int monthIndex = line.indexOf("luni");
-//                    System.out.println(monthIndex);
-//                    int yearIndex = line.indexOf("an");
-//                    System.out.println(yearIndex);
-//                    int yearsIndex = line.indexOf("ani");
-//                    System.out.println(yearsIndex);
-//                    if (line.contains("an")) {
-//                        months += Integer.valueOf(line.substring(yearIndex + 5, monthIndex - 1).trim());
-//                     }
-//                    else if(line.contains("ani"))
-//                    {
-//                        months += Integer.valueOf(line.substring(yearsIndex + 5, monthIndex - 1).trim());
-//                    }
-//
-//                } else if(line.contains("lună"))
-//                {
-//
-//                }
-//
-//                }
-//
-//            return months;
-//
-//
-//        }
-//        return null;
-//    }
+
+
+    private int getMonthsForLine(String line) {
+
+        int months = 0;
+
+        String regex = "\\d+ lun.\\)";
+
+        Pattern monthPattern = Pattern.compile(regex);   // the pattern to search for
+
+        Matcher monthMatcher = monthPattern.matcher(line);
+
+        // now try to find at least one match
+
+        if (monthMatcher.find()) {
+
+            int startIndex = monthMatcher.start();
+
+            int endIndex = monthMatcher.end();
+
+            months = Integer.valueOf(line.substring(startIndex, endIndex - 6));
+
+            System.out.println("line = " + line);
+
+            System.out.println("months = " + months);
+
+        }
+
+        return months;
+
+    }
+
+
+
+    private int getYearsForLine(String line) {
+
+        int years = 0;
+
+        String regex = "\\(\\d+ an";
+
+
+
+        Pattern yearPattern = Pattern.compile(regex);   // the pattern to search for
+
+        Matcher yearMatcher = yearPattern.matcher(line);
+
+
+
+        // now try to find at least one match
+
+        if (yearMatcher.find()) {
+
+            int startIndex = yearMatcher.start();
+
+            int endIndex = yearMatcher.end();
+
+            years = Integer.valueOf(line.substring(startIndex + 1, endIndex - 3));
+
+            System.out.println("line = " + line);
+
+            System.out.println("years = " + years);
+
+        }
+
+        return years;
+
+    }
+
+
 
 
     private String extractEducation() {

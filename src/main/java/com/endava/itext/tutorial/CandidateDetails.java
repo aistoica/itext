@@ -182,7 +182,8 @@ public class CandidateDetails {
         }
 
 
-        public CandidateDetails build() {
+        public CandidateDetails build( String path) {
+
             return new CandidateDetails(this);
         }
 
