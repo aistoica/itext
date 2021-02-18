@@ -4,17 +4,19 @@ import com.itextpdf.kernel.pdf.PdfDocument;
 
 import java.io.IOException;
 
-public class LinkedInPDFReaderENG extends LinkedInPDFReader {
+public class LinkedInPDFReaderENG extends  LinkedInPDFReader{
     private static String LINKEDIN_AUTHOR_NAME = "LinkedIn";
+    private static String pdfAuthor;
+    private static PdfDocument pdfDocument;
 
 
     public LinkedInPDFReaderENG(String filePath) throws IOException {
         super(filePath);
-        super.pdfAuthor = pdfDocument.getDocumentInfo().getAuthor();
+        this.pdfAuthor = pdfDocument.getDocumentInfo().getAuthor();
 
     }
 
-    public String getEducation() {
+    public static String getEducation() {
 
         if (isLinkedInPdf()) {
             return getLinkedInEducation();
@@ -23,23 +25,23 @@ public class LinkedInPDFReaderENG extends LinkedInPDFReader {
     }
 
 
-    public String getTopSkills() {
+    public static String getTopSkills() {
 
-        if (isLinkedInPdf()) {
+        if (isLinkedInPdf() ) {
             return getLinkedInTopSkills();
         }
         return null;
     }
-
-    private String extractTopSkills(String actualText) {
+    private static String extractTopSkills(String actualText) {
         String[] textLines = actualText.split("\n");
 
 
         for (int i = 0; i < textLines.length; i++) {
-            if (textLines[i].contains("Top Skills")) {
+            if (textLines[i].contains("Top Skills") ) {
                 String topSkills = "";
-                for (int j = i + 1; j < i + 4; j++) {
-                    topSkills += " " + textLines[j] + "\n";
+                for (int j = i+1; j < i+4; j++)
+                {
+                    topSkills += " " + textLines[j]+"\n";
                 }
 
                 return topSkills;
@@ -49,34 +51,59 @@ public class LinkedInPDFReaderENG extends LinkedInPDFReader {
     }
 
 
-    public Integer getTotalYearsOfExperience() {
 
-        int years = 0;
-        int months = 0;
-        for (int page = 1; page <= pdfDocument.getNumberOfPages(); page++) {
-            final String textOnPage = getActualText(page, false);
-            String[] linesOnPage = textOnPage.split("\n");
-            for (String line : linesOnPage) {
-                if (line.contains("year")) {
-                    int yearIndex = line.indexOf("year");
-                    int pIndex = line.indexOf("(");
-                    years += Integer.valueOf(line.substring(pIndex + 1, yearIndex - 1).trim());
-                    if (line.contains("month")) {
+
+    public static Integer getTotalYearsOfExperience() {
+
+            int years = 0;
+
+            int months = 0;
+
+            for (int page = 1; page <= pdfDocument.getNumberOfPages(); page++) {
+
+                final String textOnPage = getActualText(page, false);
+
+                String[] linesOnPage = textOnPage.split("\n");
+
+                for (String line : linesOnPage) {
+
+                    if (line.contains("year")) {
+
+                        int yearIndex = line.indexOf("year");
+
+                        int pIndex = line.indexOf("(");
+
+                        years += Integer.valueOf(line.substring(pIndex + 1, yearIndex - 1).trim());
+
+                        if (line.contains("month")) {
+
+                            int monthIndex = line.indexOf("month");
+
+                            months += Integer.valueOf(line.substring(yearIndex + 5, monthIndex - 1).trim());
+
+                        }
+
+                    } else if (line.contains("month")) {
+
                         int monthIndex = line.indexOf("month");
-                        months += Integer.valueOf(line.substring(yearIndex + 5, monthIndex - 1).trim());
-                    }
-                } else if (line.contains("month")) {
-                    int monthIndex = line.indexOf("month");
-                    int pIndex = line.indexOf("(");
-                    months += Integer.valueOf(line.substring(pIndex + 1, monthIndex - 1).trim());
-                }
-            }
-        }
-        years += months / 12;
-        return years;
-    }
 
-    private String extractEducation() {
+                        int pIndex = line.indexOf("(");
+
+                        months += Integer.valueOf(line.substring(pIndex + 1, monthIndex - 1).trim());
+
+                    }
+
+                }
+
+            }
+
+            years += months / 12;
+
+            return years;
+
+
+    }
+    private static String extractEducation() {
         String education = "";
         int noOfPages = pdfDocument.getNumberOfPages();
 
@@ -84,11 +111,11 @@ public class LinkedInPDFReaderENG extends LinkedInPDFReader {
             String actualPageText = getActualText(page, false);
             String[] textLines = actualPageText.split("\n");
 
-            for (int i = 0; i < textLines.length; i++) {
+            for (int i = 0; i< textLines.length; i++){
                 String line = textLines[i];
-                if (line.contains("Education")) {
-                    for (int j = i + 1; j < textLines.length; j++) {
-                        education += textLines[j] + "\n";
+                if (line.contains("Education")){
+                    for (int j = i+1; j < textLines.length; j++){
+                        education += textLines[j]+"\n";
 
                     }
                     education = education.substring(0, education.lastIndexOf("Page"));
@@ -99,15 +126,18 @@ public class LinkedInPDFReaderENG extends LinkedInPDFReader {
         }
         return "N/A";
     }
-
-    private String getLinkedInEducation() {
+    private static String getLinkedInEducation() {
         // Get the resultant text after applying the custom filter
         return extractEducation();
 
     }
 
 
-    private String getLinkedInTopSkills() {
+
+
+
+
+    private static String getLinkedInTopSkills() {
         // Get the resultant text after applying the custom filter
         String actualText = getActualText(1, true);
         return extractTopSkills(actualText);
@@ -115,7 +145,8 @@ public class LinkedInPDFReaderENG extends LinkedInPDFReader {
     }
 
 
-    private boolean isLinkedInPdf() {
+
+    private static boolean isLinkedInPdf() {
         //TODO: implement this
         return pdfAuthor.equals(LINKEDIN_AUTHOR_NAME);
     }

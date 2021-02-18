@@ -10,15 +10,16 @@ import com.itextpdf.kernel.pdf.canvas.parser.listener.FilteredEventListener;
 import com.itextpdf.kernel.pdf.canvas.parser.listener.LocationTextExtractionStrategy;
 
 
+import javax.swing.*;
 import java.io.IOException;
 
 
 public class LinkedInPDFReader {
 
     private static String LINKEDIN_AUTHOR_NAME = "LinkedIn";
+    private static String pdfAuthor;
+    private static PdfDocument pdfDocument;
 
-    PdfDocument pdfDocument;
-    String pdfAuthor;
 
 
     public LinkedInPDFReader(String filePath) throws IOException {
@@ -27,7 +28,7 @@ public class LinkedInPDFReader {
 
     }
 
-    public String getCurrentEmployer() {
+    public static String getCurrentEmployer() {
 
         if (isLinkedInPdf()) {
             return getLinkedInCurrentEmployer();
@@ -35,7 +36,7 @@ public class LinkedInPDFReader {
         return null;
     }
 
-    public String getCurrentJobTitle() {
+    public static String getCurrentJobTitle() {
 
         if (isLinkedInPdf()) {
             return getLinkedInCurrentJobTitle();
@@ -44,7 +45,7 @@ public class LinkedInPDFReader {
     }
 
 
-    public String getLanguages() {
+    public static String getLanguages() {
 
         if (isLinkedInPdf()) {
             return getLinkedInLanguages();
@@ -52,14 +53,14 @@ public class LinkedInPDFReader {
         return null;
     }
 
-    public String getCertifications() {
+    public static String getCertifications() {
 
         if (isLinkedInPdf()) {
             return getLinkedInCertifications();
         }
         return null;
     }
-    public  String getPDFLanguage() {
+    public static String getPDFLanguage() {
 
         if (isLinkedInPdf()) {
             return getLinkedInPdfLanguage();
@@ -68,13 +69,13 @@ public class LinkedInPDFReader {
     }
 
 
-    private String getLinkedInLanguages() {
+    private static String getLinkedInLanguages() {
         // Get the resultant text after applying the custom filter
         String actualText = getActualText(1, true);
         return extractLanguages(actualText);
 
     }
-    private String getLinkedInCertifications() {
+    private static String getLinkedInCertifications() {
         // Get the resultant text after applying the custom filter
         String actualText = getActualText(1, true);
         return extractCertifications(actualText);
@@ -82,17 +83,14 @@ public class LinkedInPDFReader {
     }
 
 
-    private String extractLanguages(String actualText) {
+    private static String extractLanguages(String actualText) {
         String[] textLines = actualText.split("\n");
         for (int i = 0; i < textLines.length; i++) {
             if (textLines[i].contains("Languages"))  {
                 String languages = "";
                 for (int j = i+1; j < i+6; j++)
                 {
-//                    if(textLines[i].contains("Certifications") )
-//                    {
-//                        languages=languages.replaceAll("Certifications","");
-//                    }
+//
                     languages += " " + textLines[j]+"\n";
 
 
@@ -104,7 +102,7 @@ public class LinkedInPDFReader {
         return null;
     }
 
-    private String extractCertifications(String actualText) {
+    private static String extractCertifications(String actualText) {
         String[] textLines = actualText.split("\n");
         for (int i = 0; i < textLines.length; i++) {
             if (textLines[i].contains("Certifications") ) {
@@ -121,7 +119,7 @@ public class LinkedInPDFReader {
         return null;
     }
 
-    private String extractCurrentJobTitle(String actualText) {
+    private static String extractCurrentJobTitle(String actualText) {
         String[] textLines = actualText.split("\n");
 
 
@@ -135,7 +133,7 @@ public class LinkedInPDFReader {
         }
 
 
-    private String getLinkedInCurrentJobTitle() {
+    private static String getLinkedInCurrentJobTitle() {
         // Get the resultant text after applying the custom filter
         String actualText = getActualText(1, false);
         return extractCurrentJobTitle(actualText);
@@ -144,7 +142,7 @@ public class LinkedInPDFReader {
 
 
 
-    private String extractCurrentEmployer(String actualText) {
+    private static String extractCurrentEmployer(String actualText) {
         String[] textLines = actualText.split("\n");
 
             if (textLines[2].contains("la") || textLines[2].contains("at")) {
@@ -161,7 +159,7 @@ public class LinkedInPDFReader {
 
 
 
-    private String extractPDFLanguage(String actualText) {
+    private static String extractPDFLanguage(String actualText) {
         String[] textLines = actualText.split("\n");
 
 
@@ -197,24 +195,20 @@ public class LinkedInPDFReader {
             return null;
         }
    }
-    private String getLinkedInPdfLanguage() {
+    private static String getLinkedInPdfLanguage() {
         // Get the resultant text after applying the custom filter
         String actualText=getActualText(1,true);
         return  extractPDFLanguage(actualText) ;
 
     }
 
-    private String getLinkedInCurrentEmployer() {
+    private static String getLinkedInCurrentEmployer() {
         // Get the resultant text after applying the custom filter
         String actualText = getActualText(1, false);
         return extractCurrentEmployer(actualText);
 
     }
-
-
-
-
-    String getActualText(int pageNo, boolean isSummarySide) {
+    static String getActualText(int pageNo, boolean isSummarySide) {
         float pageWidth = pdfDocument.getPage(pageNo).getPageSize().getWidth();
         float pageHeight = pdfDocument.getPage(pageNo).getPageSize().getHeight();
 
@@ -245,7 +239,7 @@ public class LinkedInPDFReader {
         return extractionStrategy.getResultantText();
     }
 
-    private boolean isLinkedInPdf() {
+    private static boolean isLinkedInPdf() {
         //TODO: implement this
         return pdfAuthor.equals(LINKEDIN_AUTHOR_NAME);
     }

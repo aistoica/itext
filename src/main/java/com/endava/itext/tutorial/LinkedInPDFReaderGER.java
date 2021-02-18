@@ -1,18 +1,23 @@
 package com.endava.itext.tutorial;
 
+import com.itextpdf.kernel.pdf.PdfDocument;
+
 import java.io.IOException;
 
 public class LinkedInPDFReaderGER extends LinkedInPDFReader {
     private static String LINKEDIN_AUTHOR_NAME = "LinkedIn";
+    private static String pdfAuthor;
+    private static PdfDocument pdfDocument;
+
 
 
     public LinkedInPDFReaderGER(String filePath) throws IOException {
         super(filePath);
-        super.pdfAuthor = pdfDocument.getDocumentInfo().getAuthor();
+        this.pdfAuthor = pdfDocument.getDocumentInfo().getAuthor();
 
     }
 
-    public String getEducation() {
+    public static String getEducation() {
 
         if (isLinkedInPdf()) {
             return getLinkedInEducation();
@@ -21,7 +26,7 @@ public class LinkedInPDFReaderGER extends LinkedInPDFReader {
     }
 
 
-    public String getTopSkills() {
+    public static String getTopSkills() {
 
         if (isLinkedInPdf()) {
             return getLinkedInTopSkills();
@@ -29,7 +34,7 @@ public class LinkedInPDFReaderGER extends LinkedInPDFReader {
         return null;
     }
 
-    private String extractTopSkills(String actualText) {
+    private static String extractTopSkills(String actualText) {
         String[] textLines = actualText.split("\n");
         for (int i = 0; i < textLines.length; i++) {
 
@@ -47,7 +52,7 @@ public class LinkedInPDFReaderGER extends LinkedInPDFReader {
     }
 
 
-    public Integer getTotalYearsOfExperience() {
+    public static Integer getTotalYearsOfExperience() {
 
         int years = 0;
 
@@ -98,7 +103,7 @@ public class LinkedInPDFReaderGER extends LinkedInPDFReader {
 
     }
 
-    private String extractEducation() {
+    private static String extractEducation() {
         String education = "";
         int noOfPages = pdfDocument.getNumberOfPages();
         for (int page = 1; page <= noOfPages; page++) {
@@ -120,14 +125,14 @@ public class LinkedInPDFReaderGER extends LinkedInPDFReader {
         return "N/A";
     }
 
-    private String getLinkedInEducation() {
+    private static String getLinkedInEducation() {
         // Get the resultant text after applying the custom filter
         return extractEducation();
 
     }
 
 
-    private String getLinkedInTopSkills() {
+    private static String getLinkedInTopSkills() {
         // Get the resultant text after applying the custom filter
         String actualText = getActualText(1, true);
         return extractTopSkills(actualText);
@@ -135,7 +140,7 @@ public class LinkedInPDFReaderGER extends LinkedInPDFReader {
     }
 
 
-    private boolean isLinkedInPdf() {
+    private static boolean isLinkedInPdf() {
         //TODO: implement this
         return pdfAuthor.equals(LINKEDIN_AUTHOR_NAME);
     }

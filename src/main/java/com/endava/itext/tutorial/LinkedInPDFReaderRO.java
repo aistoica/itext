@@ -1,5 +1,7 @@
 package com.endava.itext.tutorial;
 
+import com.itextpdf.kernel.pdf.PdfDocument;
+
 import java.util.regex.Pattern;
 import java.util.regex.Matcher;
 
@@ -7,13 +9,16 @@ import java.io.IOException;
 
 public class LinkedInPDFReaderRO extends LinkedInPDFReaderENG {
     private static String LINKEDIN_AUTHOR_NAME = "LinkedIn";
+    private static String pdfAuthor;
+    private static PdfDocument pdfDocument;
+
 
     public LinkedInPDFReaderRO(String filePath) throws IOException {
         super(filePath);
-        super.pdfAuthor = pdfDocument.getDocumentInfo().getAuthor();
+        this.pdfAuthor = pdfDocument.getDocumentInfo().getAuthor();
     }
 
-    public String getEducation() {
+    public static String getEducation() {
 
         if (isLinkedInPdf()) {
             return getLinkedInEducation();
@@ -21,7 +26,7 @@ public class LinkedInPDFReaderRO extends LinkedInPDFReaderENG {
         return null;
     }
 
-    public String getTopSkills() {
+    public static String getTopSkills() {
 
         if (isLinkedInPdf()) {
             return getLinkedInTopSkills();
@@ -29,7 +34,7 @@ public class LinkedInPDFReaderRO extends LinkedInPDFReaderENG {
         return null;
     }
 
-    private String extractTopSkills(String actualText) {
+    private static String extractTopSkills(String actualText) {
         String[] textLines = actualText.split("\n");
 
 
@@ -48,7 +53,7 @@ public class LinkedInPDFReaderRO extends LinkedInPDFReaderENG {
     }
 
 
-    public Integer getTotalYearsOfExperience() {
+    public static Integer getTotalYearsOfExperience() {
 
         int years = 0;
         int months = 0;
@@ -68,7 +73,7 @@ public class LinkedInPDFReaderRO extends LinkedInPDFReaderENG {
 
     }
 
-    private int getMonthsForLine(String line) {
+    private static int getMonthsForLine(String line) {
         int months = 0;
         String regex = "\\d+ lun.\\)";
 
@@ -86,7 +91,7 @@ public class LinkedInPDFReaderRO extends LinkedInPDFReaderENG {
         return months;
     }
 
-    private int getYearsForLine(String line) {
+    private static int getYearsForLine(String line) {
         int years = 0;
         String regex = "\\(\\d+ an";
 
@@ -104,7 +109,7 @@ public class LinkedInPDFReaderRO extends LinkedInPDFReaderENG {
         return years;
     }
 
-    private String extractEducation() {
+    private static String extractEducation() {
         String education = "";
         int noOfPages = pdfDocument.getNumberOfPages();
 
@@ -128,13 +133,13 @@ public class LinkedInPDFReaderRO extends LinkedInPDFReaderENG {
         return "N/A";
     }
 
-    private String getLinkedInEducation() {
+    private static String getLinkedInEducation() {
         // Get the resultant text after applying the custom filter
         return extractEducation();
 
     }
 
-    private String getLinkedInTopSkills() {
+    private static String getLinkedInTopSkills() {
         // Get the resultant text after applying the custom filter
         String actualText = getActualText(1, true);
         return extractTopSkills(actualText);
@@ -142,7 +147,7 @@ public class LinkedInPDFReaderRO extends LinkedInPDFReaderENG {
     }
 
 
-    private boolean isLinkedInPdf() {
+    private static boolean isLinkedInPdf() {
         //TODO: implement this
         return pdfAuthor.equals(LINKEDIN_AUTHOR_NAME);
     }
