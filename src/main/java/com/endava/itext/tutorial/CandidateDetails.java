@@ -1,75 +1,82 @@
 package com.endava.itext.tutorial;
 
-import java.util.Collections;
-import java.util.List;
+import java.io.File;
+import java.net.URL;
 import java.util.Set;
 
 
 public class CandidateDetails {
-    private static int yearsOfExperience;
-    private  static String name;
+    private static double yearsOfExperience;
+    private  static String candidate;
     private  static String email;
-    private  static String linkedInProfile; //url
+    private  static URL linkedInProfile; //url  url to string valid url
     private  static Set<String> topSkills;  //set de stringuri
-    private  static Set<String> languages; //set de string-uri
+    private  static  Set<String> languages; //set de string-uri
     private   static Set<String> certifications; //set de string-uri
-
     private static  String currentCompany;
     private  static String currentJobTitle;
-    private  static  List<String> education;
+    private  static  Set<String> education;
 
 
-    public String getName() {
-        return name;
+
+
+    public String getCandidate() {
+        return candidate;
     }
 
     public String getEmail() {
         return email;
     }
 
-    public String getLinkedInProfile() {
+    public URL getLinkedInProfile() {
         return linkedInProfile;
     }
 
     public Set<String> getTopSkills() {
-        return topSkills;
+        return getTopSkills();
     }
 
     public Set<String> getLanguages() {
-        return languages;
+        return getLanguages();
     }
 
     public Set<String> getCertifications() {
-        return certifications;
+        return getCertifications();
     }
 
-    public static int getYearsOfExperience() {
-        return yearsOfExperience;
+    public static double getYearsOfExperience() {
+        return getYearsOfExperience();
     }
 
     public static String getCurrentCompany() {
-        return currentCompany;
+        return getCurrentCompany();
     }
 
     public String getCurrentJobTitle() {
-        return currentJobTitle;
+        return getCurrentJobTitle();
     }
 
-    public List<String> getEducation() {
+    public static Set<String> getEducation() {
         return education;
     }
 
-    CandidateDetails(CandidateDetailsBuilder builder, String filepath) {
-        this.name = builder.getName();
+    CandidateDetails(CandidateDetailsBuilder builder) {
+        this.candidate = builder.getCandidate();
         this.email = builder.getEmail();
         this.linkedInProfile = builder.getLinkedInProfile();
-        this.topSkills = Collections.singleton(builder.getTopSkills());
-        this.languages = Collections.singleton(builder.getLanguages());
-        this.certifications = Collections.singleton(builder.getCertifications());
+        this.topSkills = builder.getTopSkills();
+        this.languages = builder.getLanguages();
+        this.certifications = builder.getCertifications();
         this.yearsOfExperience = builder.getYearsOfExperience();
         this.currentCompany = builder.getCurrentCompany();
         this.currentJobTitle = builder.getCurrentJobTitle();
-        this.education = Collections.singletonList(builder.getEducation());
+        this.education = builder.getEducation();
+    }
+
+    public Class<? extends CandidateDetails> getCandidateDetails(File file)
+    {
+        return this.getClass();
+
     }
 
 }

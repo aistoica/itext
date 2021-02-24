@@ -12,6 +12,11 @@ import com.itextpdf.kernel.pdf.canvas.parser.listener.LocationTextExtractionStra
 
 import javax.swing.*;
 import java.io.IOException;
+import java.net.MalformedURLException;
+import java.net.URL;
+import java.util.Collections;
+import java.util.HashSet;
+import java.util.Set;
 
 
 public class LinkedInPDFReader {
@@ -27,6 +32,22 @@ public class LinkedInPDFReader {
         this.pdfAuthor = pdfDocument.getDocumentInfo().getAuthor();
 
     }
+
+    public static URL getProfile() throws MalformedURLException {
+
+        if (isLinkedInPdf()) {
+            return getLinkedInProfile();
+        }
+        return null;
+    }
+    public static String getEmail() throws MalformedURLException {
+
+        if (isLinkedInPdf()) {
+            return getLinkedInEmail();
+        }
+        return null;
+    }
+
 
     public static String getCurrentEmployer() {
 
@@ -45,7 +66,7 @@ public class LinkedInPDFReader {
     }
 
 
-    public static String getLanguages() {
+    public static Set<String> getLanguages() {
 
         if (isLinkedInPdf()) {
             return getLinkedInLanguages();
@@ -53,7 +74,7 @@ public class LinkedInPDFReader {
         return null;
     }
 
-    public static String getCertifications() {
+    public static Set<String> getCertifications() {
 
         if (isLinkedInPdf()) {
             return getLinkedInCertifications();
@@ -69,50 +90,89 @@ public class LinkedInPDFReader {
     }
 
 
-    private static String getLinkedInLanguages() {
+    private static Set<String> getLinkedInLanguages() {
         // Get the resultant text after applying the custom filter
         String actualText = getActualText(1, true);
         return extractLanguages(actualText);
 
     }
-    private static String getLinkedInCertifications() {
+    private static Set<String> getLinkedInCertifications() {
         // Get the resultant text after applying the custom filter
         String actualText = getActualText(1, true);
         return extractCertifications(actualText);
 
     }
 
+    private static URL getLinkedInProfile() throws MalformedURLException {
+        String actualText = getActualText(1, true);
+        return extractProfile(actualText);
 
-    private static String extractLanguages(String actualText) {
+    }
+
+
+    private static URL extractProfile(String actualText)  {
         String[] textLines = actualText.split("\n");
+        String profile=textLines[3] ;
+        URL url = null;
+        try {
+            url= new URL(profile);
+        } catch (MalformedURLException e) {
+            e.printStackTrace();
+        }
+        return  url;
+    }
+
+
+    private static String getLinkedInEmail() throws MalformedURLException {
+        String actualText = getActualText(1, true);
+        return extractEmail(actualText);
+
+    }
+
+    private static String extractEmail(String actualText)  {
+        String[] textLines = actualText.split("\n");
+        String email=textLines[2] ;
+
+        return  email;
+    }
+    private static Set<String> extractLanguages(String actualText) {
+        String[] textLines = actualText.split("\n");
+        String stringsToRemove = "Certifications";
         for (int i = 0; i < textLines.length; i++) {
             if (textLines[i].contains("Languages"))  {
                 String languages = "";
+                Set<String> languagesSet = new HashSet<String>();
                 for (int j = i+1; j < i+6; j++)
                 {
 //
-                    languages += " " + textLines[j]+"\n";
+//                    languages += " " + textLines[j]+"\n";
+                   languagesSet.add(textLines[j]);
+                   if(textLines[j].equals("Certifications"))
+                   {
 
+                       languagesSet.removeAll(Collections.singleton(stringsToRemove));
+                       break;
+                   }
 
                 }
-                languages = languages.substring(0, languages.lastIndexOf("Certifications"));
-                return languages ;
+
+                return languagesSet ;
             }
         }
         return null;
     }
 
-    private static String extractCertifications(String actualText) {
+    private static Set<String> extractCertifications(String actualText) {
         String[] textLines = actualText.split("\n");
+        String certifs = "";
+        Set<String> certifsSet = new HashSet<String>();
         for (int i = 0; i < textLines.length; i++) {
             if (textLines[i].contains("Certifications") ) {
                 i++;
-                String certifs = "";
+//                    certifs += " " + textLines[i]+textLines[i+1] +"\n";
+                certifsSet.add(textLines[i]+textLines[i+1]);
 
-                    certifs += " " + textLines[i]+textLines[i+1] +"\n";
-
-
-                return certifs ;
+                return certifsSet ;
             }
 
         }

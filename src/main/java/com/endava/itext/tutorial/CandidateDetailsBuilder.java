@@ -1,247 +1,278 @@
 package com.endava.itext.tutorial;
 
-import com.endava.itext.tutorial.CandidateDetails;
 import com.itextpdf.kernel.pdf.PdfDocument;
 import com.itextpdf.kernel.pdf.PdfReader;
 
-import java.io.File;
 import java.io.IOException;
+import java.net.URL;
+
+import java.util.Set;
 
 public class CandidateDetailsBuilder {
 
-    private String name;
-    private String email;
-    private String linkedInProfile;
-    private String topSkills;
-    private String languages;
-    private String certifications;
-    private int yearsOfExperience;
-    private String currentCompany;
-    private String currentJobTitle;
-    private String education;
-    private static String pdfAuthor;
+    private static  String candidate;
+    private static String email;
+    private  static URL linkedInProfile;
+    private  static Set<String> topSkills;
+    private static Set<String> languages;
+    private static Set<String> certifications;
+    private static double yearsOfExperience;
+    private static String currentCompany;
+    private static String currentJobTitle;
+    private static Set<String> education;
+    private static String LINKEDIN_type_NAME = "LinkedIn";
     private static PdfDocument pdfDocument;
 
 
-    public String getName() {
-        return name;
+    public static String getCandidate() {
+        return candidate;
     }
 
-    public void setName(String name) {
-        this.name = name;
+    public void setCandidate(String filepath) throws IOException {
+        String type=pdfType(filepath);
+        String language=new LinkedInPDFReader(filepath).getPDFLanguage();
+        if(type.equals("LinkedIn") && language.equals("English"))
+        {
+            candidate=new LinkedInPDFReaderENG(filepath).getCandidate();
+        }
+        else if(type.equals("LinkedIn") && language.equals("Romanian"))
+        {
+            candidate=new LinkedInPDFReaderRO(filepath).getCandidate();
+        }
+        else if(type.equals("LinkedIn") && language.equals("Danish"))
+        {
+            candidate=new LinkedInPDFReaderDAN(filepath).getCandidate();
+        }
+        else if(type.equals("LinkedIn") && language.equals("French"))
+        {
+            candidate=new LinkedInPDFReaderFR(filepath).getCandidate();
+        }
+        else if(type.equals("LinkedIn") && language.equals("German"))
+        {
+            candidate=new LinkedInPDFReaderGER(filepath).getCandidate();
+        }
+        else if(type.equals("LinkedIn") && language.equals("Russian"))
+        {
+            candidate=new LinkedInPDFReaderRUS(filepath).getCandidate();
+        }
+        else if(type.equals("LinkedIn") && language.equals("Spanish"))
+        {
+            candidate=new LinkedInPDFReaderSPA(filepath).getCandidate();
+        } else
+        {
+           candidate=null;
+        }
     }
 
     public String getEmail() {
         return email;
     }
 
-    public void setEmail(String email) {
-        this.email = email;
+    public void setEmail(String filepath) throws IOException {
+       email= new LinkedInPDFReader(filepath).getEmail();
     }
 
-    public String getLinkedInProfile() {
+    public URL getLinkedInProfile() {
         return linkedInProfile;
     }
 
-    public void setLinkedInProfile(String linkedInProfile) {
+    public void setLinkedInProfile(URL linkedInProfile) {
         this.linkedInProfile = linkedInProfile;
     }
 
-    public String getTopSkills() {
+    public static Set<String> getTopSkills() {
         return topSkills;
     }
 
-    public void setTopSkills(String topSkills,String filepath) throws IOException {
-        String author=pdfType(filepath);
-        String language=LinkedInPDFReader.getPDFLanguage();
-        if(author.equals("LinkedIn") && language.equals("English"))
+    public void setTopSkills(Set<String> topSkills, String filepath) throws IOException {
+        String type=pdfType(filepath);
+        String language=new LinkedInPDFReader(filepath).getPDFLanguage();
+        if(type.equals("LinkedIn") && language.equals("English"))
         {
-            this.topSkills=LinkedInPDFReaderENG.getTopSkills();
+            topSkills=new LinkedInPDFReaderENG(filepath).getTopSkills();
         }
-       else if(author.equals("LinkedIn") && language.equals("Romanian"))
+       else if(type.equals("LinkedIn") && language.equals("Romanian"))
         {
-            this.topSkills=LinkedInPDFReaderRO.getTopSkills();
+            this.topSkills=new LinkedInPDFReaderRO(filepath).getTopSkills();
         }
-        else if(author.equals("LinkedIn") && language.equals("Danish"))
+        else if(type.equals("LinkedIn") && language.equals("Danish"))
         {
-            this.topSkills=LinkedInPDFReaderDAN.getTopSkills();
+            this.topSkills= new LinkedInPDFReaderRO(filepath).getTopSkills();
         }
-        else if(author.equals("LinkedIn") && language.equals("French"))
+        else if(type.equals("LinkedIn") && language.equals("French"))
         {
-            this.topSkills=LinkedInPDFReaderFR.getTopSkills();
+            this.topSkills= new LinkedInPDFReaderFR(filepath).getTopSkills();
         }
-        else if(author.equals("LinkedIn") && language.equals("German"))
+        else if(type.equals("LinkedIn") && language.equals("German"))
         {
-            this.topSkills=LinkedInPDFReaderGER.getTopSkills();
+            this.topSkills= new LinkedInPDFReaderGER(filepath).getTopSkills();
         }
-        else if(author.equals("LinkedIn") && language.equals("Russian"))
+        else if(type.equals("LinkedIn") && language.equals("Russian"))
         {
-            this.topSkills=LinkedInPDFReaderRUS.getTopSkills();
+            this.topSkills= new LinkedInPDFReaderRUS(filepath).getTopSkills();
         }
-        else if(author.equals("LinkedIn") && language.equals("Spanish"))
+        else if(type.equals("LinkedIn") && language.equals("Spanish"))
         {
-            this.topSkills=LinkedInPDFReaderSPA.getTopSkills();
+            this.topSkills= new LinkedInPDFReaderSPA(filepath).getTopSkills();
         } else
         {
-            this.topSkills="N/A";
+            this.topSkills= null;
         }
     }
 
-    public String getLanguages() {
+    public static Set<String> getLanguages() {
         return languages;
     }
 
     public void setLanguages(String filepath) throws IOException {
-        String author = pdfType(filepath);
-        if (author.equals("LinkedIn")) {
-            this.languages = LinkedInPDFReader.getLanguages();
+        String type = pdfType(filepath);
+        if (type.equals("LinkedIn")) {
+            this.languages = new LinkedInPDFReader(filepath).getLanguages();
         }
         else
         {
-            this.languages="N/A";
+            this.languages=null;
         }
     }
-    public String getCertifications() {
+    public static Set<String> getCertifications() {
         return certifications;
     }
 
     public void setCertifications(String filepath) throws IOException {
 
-        String author = pdfType(filepath);
-        if (author.equals("LinkedIn")) {
-            this.certifications = LinkedInPDFReader.getCertifications();
+        String type = pdfType(filepath);
+        if (type.equals("LinkedIn")) {
+            this.certifications = new LinkedInPDFReader(filepath).getCertifications();
         }
         else
         {
-            this.certifications="N/A";
+            this.certifications=null;
         }
     }
 
-    public int getYearsOfExperience() {
+    public static double getYearsOfExperience() {
         return yearsOfExperience;
     }
 
     public void setYearsOfExperience(String filepath) throws IOException {
-        String author=pdfType(filepath);
-        String language=LinkedInPDFReader.getPDFLanguage();
-        if(author.equals("LinkedIn") && language.equals("English"))
+        String type=pdfType(filepath);
+        String language=new LinkedInPDFReader(filepath).getPDFLanguage();
+        if(type.equals("LinkedIn") && language.equals("English"))
         {
-            this.yearsOfExperience=LinkedInPDFReaderENG.getTotalYearsOfExperience();
+            this.yearsOfExperience=new LinkedInPDFReaderENG(filepath).getTotalYearsOfExperience();
         }
-        else if(author.equals("LinkedIn") && language.equals("Romanian"))
+        else if(type.equals("LinkedIn") && language.equals("Romanian"))
         {
-            this.yearsOfExperience=LinkedInPDFReaderRO.getTotalYearsOfExperience();
+            this.yearsOfExperience=new LinkedInPDFReaderRO(filepath).getTotalYearsOfExperience();
         }
-        else if(author.equals("LinkedIn") && language.equals("Danish"))
+        else if(type.equals("LinkedIn") && language.equals("Danish"))
         {
-            this.yearsOfExperience=LinkedInPDFReaderDAN.getTotalYearsOfExperience();
+            this.yearsOfExperience=new LinkedInPDFReaderDAN(filepath).getTotalYearsOfExperience();
         }
-        else if(author.equals("LinkedIn") && language.equals("French"))
+        else if(type.equals("LinkedIn") && language.equals("French"))
         {
-            this.yearsOfExperience=LinkedInPDFReaderFR.getTotalYearsOfExperience();
+            this.yearsOfExperience=new LinkedInPDFReaderFR(filepath).getTotalYearsOfExperience();
         }
-        else if(author.equals("LinkedIn") && language.equals("German"))
+        else if(type.equals("LinkedIn") && language.equals("German"))
         {
-            this.yearsOfExperience=LinkedInPDFReaderGER.getTotalYearsOfExperience();
+            this.yearsOfExperience=new LinkedInPDFReaderGER(filepath).getTotalYearsOfExperience();
         }
-        else if(author.equals("LinkedIn") && language.equals("Russian"))
+        else if(type.equals("LinkedIn") && language.equals("Russian"))
         {
-            this.yearsOfExperience=LinkedInPDFReaderRUS.getTotalYearsOfExperience();
+            this.yearsOfExperience=new LinkedInPDFReaderRUS(filepath).getTotalYearsOfExperience();
         }
-        else if(author.equals("LinkedIn") && language.equals("Spanish"))
+        else if(type.equals("LinkedIn") && language.equals("Spanish"))
         {
-            this.yearsOfExperience=LinkedInPDFReaderSPA.getTotalYearsOfExperience();
+            this.yearsOfExperience=new LinkedInPDFReaderRUS(filepath).getTotalYearsOfExperience();
         } else
         {
             this.yearsOfExperience=0;
         }
     }
 
-    public String getCurrentCompany() {
+    public static String getCurrentCompany() {
         return currentCompany;
     }
 
     public void setCurrentCompany(String filepath) throws IOException {
-        String author = pdfType(filepath);
-        if (author.equals("LinkedIn")) {
-            this.currentCompany = LinkedInPDFReader.getCurrentEmployer();
+        String type = pdfType(filepath);
+        if (type.equals("LinkedIn")) {
+            this.currentCompany = new LinkedInPDFReader(filepath).getCurrentEmployer();
+
         }
         else
         {
-            this.currentCompany="N/A";
+            this.currentCompany=null;
         }
     }
 
-    public String getCurrentJobTitle() {
+    public static String getCurrentJobTitle() {
         return currentJobTitle;
     }
 
     public void setCurrentJobTitle(String filepath) throws IOException {
-        String author = pdfType(filepath);
-        if (author.equals("LinkedIn")) {
-            this.currentJobTitle = LinkedInPDFReader.getCurrentJobTitle();
+        String type = pdfType(filepath);
+        if (type.equals("LinkedIn")) {
+            currentJobTitle = new LinkedInPDFReader(filepath).getCurrentJobTitle();
         }
         else
         {
-            this.currentCompany="N/A";
+            currentJobTitle="N/A";
         }
     }
-
-    public String getEducation() {
+    public static Set <String> getEducation() {
         return education;
     }
 
     public void setEducation(String filepath) throws IOException {
-        String author=pdfType(filepath);
-        String language=LinkedInPDFReader.getPDFLanguage();
-        if(author.equals("LinkedIn") && language.equals("English"))
+        String type=pdfType(filepath);
+        String language=new LinkedInPDFReader(filepath).getPDFLanguage();
+        if(  type.equals("LinkedIn") &&  language.equals("English"))
         {
-            this.education=LinkedInPDFReaderENG.getEducation();
+            education=new LinkedInPDFReaderENG(filepath).getEducation();
         }
-        else if(author.equals("LinkedIn") && language.equals("Romanian"))
+        else if(type.equals("LinkedIn") && language.equals("Romanian"))
         {
-            this.education=LinkedInPDFReaderRO.getEducation();
+            education=new LinkedInPDFReaderRO(filepath).getEducation();
         }
-        else if(author.equals("LinkedIn") && language.equals("Danish"))
+        else if(type.equals("LinkedIn") && language.equals("Danish"))
         {
-            this.education=LinkedInPDFReaderDAN.getEducation();
+            education=new LinkedInPDFReaderDAN(filepath).getEducation();
         }
-        else if(author.equals("LinkedIn") && language.equals("French"))
+        else if(type.equals("LinkedIn") && language.equals("French"))
         {
-            this.education=LinkedInPDFReaderFR.getEducation();
+            education=new LinkedInPDFReaderFR(filepath).getEducation();
         }
-        else if(author.equals("LinkedIn") && language.equals("German"))
+        else if(type.equals("LinkedIn") && language.equals("German"))
         {
-            this.education=LinkedInPDFReaderGER.getEducation();
+            education=new LinkedInPDFReaderGER(filepath).getEducation();
         }
-        else if(author.equals("LinkedIn") && language.equals("Russian"))
+        else if(type.equals("LinkedIn") && language.equals("Russian"))
         {
-            this.education=LinkedInPDFReaderRUS.getEducation();
+            education=new LinkedInPDFReaderRUS(filepath).getEducation();
         }
-        else if(author.equals("LinkedIn") && language.equals("Spanish"))
+        else if(type.equals("LinkedIn") && language.equals("Spanish"))
         {
-            this.education=LinkedInPDFReaderSPA.getEducation();
+            education=new LinkedInPDFReaderSPA(filepath).getEducation();
         } else
         {
-            this.education="N/A";
+            education=null;
         }
     }
 
-    public CandidateDetailsBuilder(String name, String email, String linkedInProfile ,String filePath) throws IOException {
-        this.name = name;
-        this.email = email;
-        this.linkedInProfile = linkedInProfile;
+    public CandidateDetailsBuilder(String filePath) throws IOException {
+
         this.pdfDocument = new PdfDocument(new PdfReader(filePath));
     }
 
     public String pdfType( String filePath) throws IOException {
-        PdfDocument pdfDocument = new PdfDocument(new PdfReader(filePath));
+
        String linkedInAuthor= pdfDocument.getDocumentInfo().getAuthor();
        String europassTitle=pdfDocument.getDocumentInfo().getTitle();
        if(linkedInAuthor.equals("LinkedIn"))
-       {
-            return "LinkedIn";
-       }else if(europassTitle.equals("Europass"))
+       { return "LinkedIn";
+       }
+       else if(europassTitle.equals("Europass"))
        {
            return "EuroPass" ;
        }
@@ -249,10 +280,8 @@ public class CandidateDetailsBuilder {
     }
 
 
-    public CandidateDetails build (String filepath) {
-
-
-        return new CandidateDetails(this,filepath);
+    public CandidateDetails build () {
+        return new CandidateDetails(this);
     }
 
 }
